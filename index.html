@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Visit to Mars</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="jumbotron text-center">
+      <h1>Visit Mars</h1>
+      <p>Actually, don't.</p>
+      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Get Data!</a></p>
+    </div>
+    <img src="{{ mars.image }}" alt="Mars">
+    <h2>Recent Mars News</h2>
+    <h3>{{ mars.title }}</h3>
+    <h4>{{ mars.paragraph }}</h4>
+    <h5>{{ mars.quick_facts }}</h5>
+    <h5>{{ mars.fun_facts }}</h5>
+  </div>
+  </div>
+</body>
+
+</html>
