@@ -4,14 +4,12 @@ import time
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 
+
 def init():
     # initiate splinter
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=False)
     return browser
-
-# Create dictionary to hold data
-mars_data = {}
 
 def mars_news():
     
@@ -33,13 +31,9 @@ def mars_news():
     # Get the Latest Paragraph Text
     paragraph = soup.find("div", class_="article_teaser_body").get_text()
     
-    # Add to Mars Data Dictionary
-    mars_data['title'] = title 
-    mars_data['paragraph'] = paragraph
-    
     # Close Browser and Return Data
     browser.quit()
-    return mars_data
+    return title, paragraph
 #__________________________________________________________________________________#
 
 def mars_image():
@@ -61,13 +55,9 @@ def mars_image():
     featured_image_path = soup.find_all('img')[1]["src"]
     featured_image = url + featured_image_path
     
-    # Add to Mars Data Dictionary
-    mars_data['image_url'] = featured_image_url
-    mars_data['image'] = featured_image
-    
     # Close Browser and Return Data
     browser.quit()
-    return mars_data
+    return featured_image, featured_image_url
     
 #__________________________________________________________________________________#
 
@@ -82,7 +72,7 @@ def mars_facts():
     time.sleep(1)
     
     # Use pandas read html for Mars Planet Profile
-    mars_facts_profile = pd.read_html(url)[1]
+    mars_facts_profile = pd.read_html(url)[0].to_html()
 
     # Scrape page into Soup
     html = browser.html
@@ -93,11 +83,32 @@ def mars_facts():
     for facts in mars_facts_list:
     # Loop through facts list to get text and add to Mars Data
         facts_text = facts.text
-        mars_data['facts'] = facts_text
 
     # Add Profile Facts to Mars Data Dictionary
-    mars_data['facts_profile'] = mars_facts_profile
     
     # Close Browser and Return Data
     browser.quit()
-    return mars_data
+    return mars_facts_profile, facts_text
+
+#__________________________________________________________________________________#
+
+def scrape_all():
+       
+    browser = init()
+    
+    title, paragraph = mars_news()
+    featured_image, featured_image_url = mars_image()
+    mars_facts_profile, facts_text = mars_facts()
+
+    data = {
+        "news_title": title,
+        "news_paragraph": paragraph,
+        "featured_image": featured_image,
+        "facts_profile": mars_facts_profile,
+        "facts_list": facts_text
+                        }
+    browser.quit()
+    return data 
+
+if __name__ == "__main__":
+    print(scrape_all())
