@@ -58,10 +58,12 @@ def mars_image():
     soup = bs(html, "html.parser")
     
     # Get the current Featured Mars Image
-    featured_image = soup.find_all('img')[1]["src"]
+    featured_image_path = soup.find_all('img')[1]["src"]
+    featured_image = url + featured_image_path
     
     # Add to Mars Data Dictionary
-    mars_data['image'] = featured_image_url + featured_image
+    mars_data['image_url'] = featured_image_url
+    mars_data['image'] = featured_image
     
     # Close Browser and Return Data
     browser.quit()
@@ -88,10 +90,13 @@ def mars_facts():
 
     # Get the remaining facts about the planet
     mars_facts_list = soup.find_all("ul", class_="mt-3")
-    
-    # Add to Mars Data Dictionary
-    mars_data['quick_facts'] = mars_facts_profile
-    mars_data['fun_facts'] =  mars_facts_list
+    for facts in mars_facts_list:
+    # Loop through facts list to get text and add to Mars Data
+        facts_text = facts.text
+        mars_data['facts'] = facts_text
+
+    # Add Profile Facts to Mars Data Dictionary
+    mars_data['facts_profile'] = mars_facts_profile
     
     # Close Browser and Return Data
     browser.quit()
